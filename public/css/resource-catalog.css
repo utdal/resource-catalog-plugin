@@ -1,0 +1,125 @@
+@keyframes resource-catalog-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.resource-catalog #search_and_filter_container {
+  text-align: center;
+  padding: 1em;
+  animation: resource-catalog-fade-in 0.4s;
+}
+
+.resource-catalog .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+
+.resource-catalog button .details-arrow {
+  display: inline-block;
+  transition: transform 0.1s;
+}
+
+.resource-catalog button[aria-expanded="true"] .details-arrow {
+  transform: rotate(90deg);
+}
+
+.resource-catalog .activate_search_btn_container {
+  text-align: center;
+}
+
+.resource-catalog input.project-searchbox {
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+.resource-catalog .project-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.resource-catalog .project-filters .project-filter {
+  padding: 10px 20px;
+  flex-basis: 20%;
+  min-width: 275px;
+}
+
+.resource-catalog .project-filters .project-filter label:not(.checkbox-label) {
+  display: block;
+  font-size: 24px;
+  line-height: 125%;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+.resource-catalog .project-filters .project-filter select {
+  font-size: 18px;
+  width: 100%;
+  background-color: #f0f0f0;
+}
+
+.resource-catalog .resources {
+  margin: 2em 0;
+  padding: 0;
+}
+
+.resource-catalog .resource {
+  margin: 2em 0;
+}
+
+.resource-catalog .resource .resource-title {
+  margin-bottom: 0.1em;
+}
+
+.resource-catalog .resource .resource-cats-and-tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.resource-catalog .resource .resource-category {
+  display: flex;
+  margin: 0.3em;
+}
+
+.resource-catalog .resource .resource-category .first-letter {
+	padding: 0.28em;
+	border-radius: 50%;
+	width: 1.2em;
+	height: 1.2em;
+	font-size: 2em;
+	overflow: hidden;
+	line-height: 0.8em;
+	background-color: #0000002b;
+	text-align: center;
+	letter-spacing: 3em;
+	word-break: break-word;
+	font-family: monospace;
+	display: inline-block;
+}
+
+.resource-catalog .resource .resource-tag, .resource-catalog .resource .resource-length {
+  display: inline-block;
+  margin: 0.3em;
+  font-family: monospace;
+  background-color: #0000002b;
+  padding: 0.1em 0.3em;
+  font-size: 0.8em;
+  border-radius: 6px;
+}
+
+.resource-catalog .resource-excerpt, .resource-catalog .resource-content {
+  margin-top: 1em;
+}
+
+.resource-catalog .resource-content {
+  animation: resource-catalog-fade-in 0.4s;
+}
