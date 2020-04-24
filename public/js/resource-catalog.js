@@ -1,4 +1,6 @@
-Vue.config.devtools = true;
+if (window.location.hostname.endsWith('test')) {
+  Vue.config.devtools = true;
+}
 
 let resource_catalog_app = new Vue({
   el: '#resource_catalog',
