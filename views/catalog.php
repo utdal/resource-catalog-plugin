@@ -75,6 +75,7 @@
                     <span class="first-letter" :title="categoryName(category)">{{ categoryName(category).charAt(0) }}</span>
                     <span class="category-name sr-only">{{ categoryName(category) }}</span>
                 </div>
+                <div v-for="audience in resource.resource_audiences" :class="['resource-audience', audienceSlug(audience)]">{{ audienceName(audience) }}</div>
                 <div v-for="tag in resource.tags" :class="['resource-tag', tagSlug(tag)]">{{ tagName(tag) }}</div>
                 <div v-for="length in resource.resource_lengths" :class="['resource-length', lengthSlug(length)]">{{ lengthName(length) }}</div>
             </section>

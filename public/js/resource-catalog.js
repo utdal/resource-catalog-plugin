@@ -219,6 +219,14 @@ let resource_catalog_app = new Vue({
       return this.getPropertyValue(id, 'lengths', 'slug');
     },
 
+    audienceName(id) {
+      return this.getPropertyValue(id, 'audiences', 'name');
+    },
+
+    audienceSlug(id) {
+      return this.getPropertyValue(id, 'audiences', 'slug');
+    },
+
     toggleSearchExpanded() {
       this.search_expanded = !this.search_expanded;
     },

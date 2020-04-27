@@ -106,7 +106,9 @@
 	display: inline-block;
 }
 
-.resource-catalog .resource .resource-tag, .resource-catalog .resource .resource-length {
+.resource-catalog .resource .resource-tag,
+.resource-catalog .resource .resource-length,
+.resource-catalog .resource .resource-audience {
   display: inline-block;
   margin: 0.3em;
   font-family: monospace;
