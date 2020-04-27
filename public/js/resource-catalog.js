@@ -135,7 +135,7 @@ let resource_catalog_app = new Vue({
 
     fetchResources() {
       let params = {};
-      let url = new URL('/wp-json/wp/v2/resource', this.base_url);
+      let url = new URL(this.base_url + '/wp-json/wp/v2/resource');
 
       if (this.audience_filter !== 'all') {
         params.resource_audiences = this.audience_filter;
@@ -163,23 +163,23 @@ let resource_catalog_app = new Vue({
     },
 
     fetchAudiences() {
-      this.fetchFromWordPress(new URL('/wp-json/wp/v2/resource_audiences', this.base_url), 'audiences');
+      this.fetchFromWordPress(new URL(this.base_url + '/wp-json/wp/v2/resource_audiences'), 'audiences');
     },
 
     fetchLengths() {
-      this.fetchFromWordPress(new URL('/wp-json/wp/v2/resource_lengths', this.base_url), 'lengths');
+      this.fetchFromWordPress(new URL(this.base_url + '/wp-json/wp/v2/resource_lengths'), 'lengths');
     },
 
     fetchPrograms() {
-      this.fetchFromWordPress(new URL('/wp-json/wp/v2/resource_programs', this.base_url), 'programs');
+      this.fetchFromWordPress(new URL(this.base_url + '/wp-json/wp/v2/resource_programs'), 'programs');
     },
 
     fetchCategories() {
-      this.fetchFromWordPress(new URL('/wp-json/wp/v2/categories', this.base_url), 'categories');
+      this.fetchFromWordPress(new URL(this.base_url + '/wp-json/wp/v2/categories'), 'categories');
     },
 
     fetchTags() {
-      this.fetchFromWordPress(new URL('/wp-json/wp/v2/tags', this.base_url), 'tags');
+      this.fetchFromWordPress(new URL(this.base_url + '/wp-json/wp/v2/tags'), 'tags');
     },
 
     debounceFetchResources() {
