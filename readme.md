@@ -16,6 +16,7 @@ Example usage: `[resource_catalog search_expand_button="false" search_expanded="
 
 - `search_expand_button="true"` : show/hide the search expand button
 - `search="true"` : show/hide the search box
+- `reset="true"` : show/hide the reset button
 - `filters="true"` : show/hide all filters
 - `audiences_filter="true"` : show/hide the audiences filter
 - `lengths_filter="true"` : show/hide the lengths filter

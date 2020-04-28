@@ -23,9 +23,10 @@ let resource_catalog_app = new Vue({
     search_timeout: undefined,
     search_expanded: false,
     features: {
-      show_all: true,
+      initial_load: true,
       search_expand_button: true,
       search: true,
+      reset: true,
       filters: true,
       filter: {
         audiences: true,
@@ -85,6 +86,7 @@ let resource_catalog_app = new Vue({
         if ('site_url' in options) this.base_url = validate_url(options.site_url) || this.base_url;
         if ('search_expand_button' in options) this.features.search_expand_button = Boolean(options.search_expand_button);
         if ('search' in options) this.features.search = Boolean(options.search);
+        if ('reset' in options) this.features.reset = Boolean(options.reset);
         if ('show_all' in options) this.features.initial_load = Boolean(options.show_all);
         if ('audiences_filter' in options) this.features.filter.audiences = Boolean(options.audiences_filter);
         if ('lengths_filter' in options) this.features.filter.lengths = Boolean(options.lengths_filter);
@@ -251,7 +253,21 @@ let resource_catalog_app = new Vue({
 
     resourceContentShown(resource) {
       return resource.content && resource.content.protected;
-    }
+    },
+
+    reset() {
+      this.audience_filter = 'all';
+      this.length_filter = 'all';
+      this.program_filter = 'all';
+      this.category_filter = 'all';
+      this.tag_filter = 'all';
+      this.search = '';
+      if (this.features.initial_load) {
+        this.fetchResources();
+      } else {
+        this.resources = [];
+      }
+    },
 
   },
 

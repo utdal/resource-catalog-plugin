@@ -61,6 +61,13 @@
                     </select>
                 </div>
 
+                <div v-if="features.reset && (features.search || features.filters)" class="reset_btn">
+                    <button type="button" @click="reset">
+                        <span class="reset-icon">&#8635;</span>
+                        <span class="reset-label">Reset</span>
+                    </button>
+                </div>
+
             </div>
         </div>
     </div>
