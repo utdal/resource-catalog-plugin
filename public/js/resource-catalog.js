@@ -96,41 +96,27 @@ let resource_catalog_app = new Vue({
       }
     },
 
-    fetchFromWordPress(url, propertyName) {
+    fetchFromWordPress(url, propertyName, page = 1, union = false) {
       this.loading = true;
       let totalPages;
       let params = new URLSearchParams(url.search);
-      params.append('page', 1);
-      params.append('per_page', 50);
+      params.set('page', page);
+      params.set('per_page', 50);
       url.search = params;
 
       fetch(url)
         .then((response) => {
-          totalPages = response.headers.get('X-WP-TotalPages');
+          totalPages = response.headers.get('X-WP-TotalPages') || 1;
           return response.json();
         })
         .then((data) => {
-          this[propertyName] = data;
+          this[propertyName] = union ? _.unionBy(this[propertyName], data, 'id') : data;
           this.$set(this.fetched, propertyName, true);
           this.loading = false;
-          this.fetchAdditionalPages(url, propertyName, totalPages, params);
+          if (page < totalPages) {
+            this.fetchFromWordPress(url, propertyName, page+1, true);
+          }
         });
-    },
-
-    fetchAdditionalPages(url, propertyName, totalPages, params) {
-      for (let i = 2; i <= totalPages; i++) {
-        this.loading = true;
-        params.set('page', i);
-        url.search = params;
-        fetch(url)
-          .then(response => {
-            return response.json();
-          })
-          .then(moreresults => {
-            this[propertyName] = this[propertyName].concat(moreresults);
-            this.loading = false;
-          });
-      }
     },
 
     fetchResources() {

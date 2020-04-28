@@ -36,7 +36,8 @@ class ResourceCatalogPlugin
         wp_register_style('resource_catalog_css', $this->asset_url . '/css/resource-catalog.css', [], $this->version);
 
         wp_register_script('vue.js', 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js', [], '2.6.10');
-        wp_register_script('resource_catalog_js', $this->asset_url . '/js/resource-catalog.js', ['vue.js'], $this->version);
+        wp_register_script('lodash.js', 'https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js', [], '4.17.15');
+        wp_register_script('resource_catalog_js', $this->asset_url . '/js/resource-catalog.js', ['vue.js', 'lodash.js'], $this->version);
     }
 
     public function registerPostTypes()
