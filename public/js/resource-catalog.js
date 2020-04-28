@@ -146,6 +146,26 @@ let resource_catalog_app = new Vue({
 
       this.$set(this.fetched, 'resources', false);
       this.fetchFromWordPress(url, 'resources');
+
+      // Search also searches tags and categories
+      if (this.search) {
+        delete params.search;
+        let searched_tags = this.searchFetchedTags(this.search);
+        let searched_cats = this.searchFetchedCategories(this.search);
+
+        if (this.tag_filter === 'all' && searched_tags.length > 0) {
+          params.tags = searched_tags.map(tag => tag.id).join(',');
+          url.search = new URLSearchParams(params);
+          this.fetchFromWordPress(url, 'resources', 1, true);
+          delete params.tags;
+        }
+
+        if (this.category_filter === 'all' && searched_cats.length > 0) {
+          params.categories = searched_cats.map(cat => cat.id).join(',');
+          url.search = new URLSearchParams(params);
+          this.fetchFromWordPress(url, 'resources', 1, true);
+        }
+      }
     },
 
     fetchAudiences() {
@@ -173,6 +193,14 @@ let resource_catalog_app = new Vue({
       this.search_timeout = setTimeout(() => {
         this.fetchResources();
       }, 350);
+    },
+
+    searchFetchedTags(query) {
+      return this.tags.filter(tag => tag.name.toLowerCase().includes(query.toLowerCase()));
+    },
+
+    searchFetchedCategories(query) {
+      return this.categories.filter(cat => cat.name.toLowerCase().includes(query.toLowerCase()));
     },
 
     getPropertyValue(id, propertyName, attributeName) {
