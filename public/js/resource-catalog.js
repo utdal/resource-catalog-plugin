@@ -62,7 +62,7 @@ let resource_catalog_app = new Vue({
     },
 
     filtered() {
-      return this.search ||
+      return this.search.length > 0 ||
         this.audience_filter !== 'all' ||
         this.length_filter !== 'all' ||
         this.program_filter !== 'all' ||
