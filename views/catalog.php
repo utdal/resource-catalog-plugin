@@ -35,9 +35,9 @@
                 </div>
 
                 <div v-if="features.filter.tags" class="project-filter">
-                    <label for="tags_p">Tag</label>
+                    <label for="tags_p">Topic</label>
                     <select class="tags_filter" name="tags_p" v-model="tag_filter" @change="fetchResources">
-                        <option selected value="all">All Tags</option>
+                        <option selected value="all">All Topics</option>
                         <option disabled>---</option>
                         <option v-for="tag in tags" :value="tag.id">{{ tag.name }}</option>
                     </select>
