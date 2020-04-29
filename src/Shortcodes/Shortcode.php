@@ -16,6 +16,9 @@ abstract class Shortcode
     /** @var array Filters to apply to attributes */
     public $attribute_filters = [];
 
+    /** @var array Filter options to apply to attributes */
+    public $attribute_filter_options = [];
+
     /**
      * Shortcode class constructor.
      */
@@ -54,7 +57,7 @@ abstract class Shortcode
         $this->attributes = shortcode_atts($this->default_attributes, $attributes);
 
         foreach ($this->attribute_filters as $attribute => $filter) {
-            $this->attributes[$attribute] = filter_var($this->attributes[$attribute], $filter);
+            $this->attributes[$attribute] = filter_var($this->attributes[$attribute], $filter, $this->attribute_filter_options[$attribute] ?? []);
         }
     }
 

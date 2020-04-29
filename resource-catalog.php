@@ -11,7 +11,7 @@
  * Plugin Name:       UT Dallas Resource Catalog
  * Plugin URI:        https://github.com/utdallasresearch/resource-catalog
  * Description:       Manage and display a searchable, filterable catalog of resources. See `readme.md` for more info.
- * Version:           1.0.4
+ * Version:           1.1.0
  * Author:            UT Dallas Research Information Systems
  * Author URI:        https://research.utdallas.edu
  * License:           MIT
@@ -20,7 +20,7 @@
  * Domain Path:       /languages
  */
 
-define('UTDallasResourceCatalog\PLUGIN_VERSION', '1.0.4');
+define('UTDallasResourceCatalog\PLUGIN_VERSION', '1.1.0');
 define('UTDallasResourceCatalog\PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('UTDallasResourceCatalog\PLUGIN_URL', plugin_dir_url(__FILE__));
 

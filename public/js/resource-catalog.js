@@ -36,6 +36,9 @@ let resource_catalog_app = new Vue({
         programs: true,
       },
     },
+    order: {
+      resources: {by: 'title', how: 'asc'},
+    },
     fetched: {
       resources: false,
       audiences: false,
@@ -83,6 +86,9 @@ let resource_catalog_app = new Vue({
 
       if (typeof resource_catalog_options === 'object') {
         let options = resource_catalog_options;
+        let order_choices = ['asc', 'desc'];
+        let orderby_choices = ['author', 'date', 'id', 'include', 'modified', 'parent', 'relevance', 'slug', 'include_slugs', 'title'];
+
         if ('site_url' in options) this.base_url = validate_url(options.site_url) || this.base_url;
         if ('search_expand_button' in options) this.features.search_expand_button = Boolean(options.search_expand_button);
         if ('search' in options) this.features.search = Boolean(options.search);
@@ -94,11 +100,13 @@ let resource_catalog_app = new Vue({
         if ('categories_filter' in options) this.features.filter.categories = Boolean(options.categories_filter);
         if ('programs_filter' in options) this.features.filter.programs = Boolean(options.programs_filter);
         if ('filters' in options) this.features.filters = Boolean(options.filters);
+        if ('order' in options) this.order.resources.how = order_choices.includes(options.order) ? options.order : 'asc';
+        if ('orderby' in options) this.order.resources.by = orderby_choices.includes(options.orderby) ? options.orderby : 'title';
         if ('search_expanded' in options) this.search_expanded = this.features.search_expand_button ? Boolean(options.search_expanded) : true;
       }
     },
 
-    fetchFromWordPress(url, propertyName, page = 1, union = false) {
+    fetchFromWordPress(url, propertyName, page = 1, union = false, sort = false) {
       this.loading = true;
       let totalPages;
       let params = new URLSearchParams(url.search);
@@ -117,6 +125,8 @@ let resource_catalog_app = new Vue({
           this.loading = false;
           if (page < totalPages) {
             this.fetchFromWordPress(url, propertyName, page+1, true);
+          } else if (sort) {
+            this.sort(propertyName);
           }
         });
     },
@@ -124,6 +134,9 @@ let resource_catalog_app = new Vue({
     fetchResources() {
       let params = {};
       let url = new URL(this.base_url + '/wp-json/wp/v2/resource');
+
+      params.orderby = this.order.resources.by;
+      params.order = this.order.resources.how;
 
       if (this.audience_filter !== 'all') {
         params.resource_audiences = this.audience_filter;
@@ -158,14 +171,14 @@ let resource_catalog_app = new Vue({
         if (this.tag_filter === 'all' && searched_tags.length > 0) {
           params.tags = searched_tags.map(tag => tag.id).join(',');
           url.search = new URLSearchParams(params);
-          this.fetchFromWordPress(url, 'resources', 1, true);
+          this.fetchFromWordPress(url, 'resources', 1, true, true);
           delete params.tags;
         }
 
         if (this.category_filter === 'all' && searched_cats.length > 0) {
           params.categories = searched_cats.map(cat => cat.id).join(',');
           url.search = new URLSearchParams(params);
-          this.fetchFromWordPress(url, 'resources', 1, true);
+          this.fetchFromWordPress(url, 'resources', 1, true, true);
         }
       }
     },
@@ -195,6 +208,12 @@ let resource_catalog_app = new Vue({
       this.search_timeout = setTimeout(() => {
         this.fetchResources();
       }, 350);
+    },
+
+    sort(propertyName) {
+      if (propertyName in this.order) {
+        this[propertyName] = _.orderBy(this[propertyName], this.order[propertyName].by, this.order[propertyName].how);
+      }
     },
 
     searchFetchedTags(query) {

@@ -23,6 +23,8 @@ class ResourceCatalog extends Shortcode
         'categories_filter' => true,
         'programs_filter' => true,
         'search_expanded' => false,
+        'order' => 'asc',
+        'orderby' => 'title',
         'show_all' => true,
     ];
 
@@ -39,7 +41,29 @@ class ResourceCatalog extends Shortcode
         'categories_filter' => FILTER_VALIDATE_BOOLEAN,
         'programs_filter' => FILTER_VALIDATE_BOOLEAN,
         'search_expanded' => FILTER_VALIDATE_BOOLEAN,
+        'order' => FILTER_CALLBACK,
+        'orderby' => FILTER_CALLBACK,
         'show_all' => FILTER_VALIDATE_BOOLEAN,
+    ];
+
+    /** @var array Whitelist values for shortcode attributes */
+    public $attribute_whitelist = [
+        'order' => [
+            'asc',
+            'desc',
+        ],
+        'orderby' => [
+            'author',
+            'date',
+            'id',
+            'include',
+            'modified',
+            'parent',
+            'relevance',
+            'slug',
+            'include_slugs',
+            'title'
+        ],
     ];
 
     /**
@@ -48,6 +72,9 @@ class ResourceCatalog extends Shortcode
     public function __construct()
     {
         $this->default_attributes['site_url'] = get_bloginfo('url');
+
+        $this->attribute_filter_options['order'] = ['options' => [$this, 'whitelistOrder']];
+        $this->attribute_filter_options['orderby'] = ['options' => [$this, 'whitelistOrderBy']];
 
         parent::__construct();
     }
@@ -68,5 +95,27 @@ class ResourceCatalog extends Shortcode
         include("{$this->view_path}/catalog.php");
 
         return ob_get_clean();
+    }
+
+    /**
+     * Filters only allowable orders
+     *
+     * @param string $order
+     * @return string
+     */
+    public function whitelistOrder($order)
+    {
+        return in_array($order, $this->attribute_whitelist['order'], true) ? $order : $this->default_attributes['order'];
+    }
+
+    /**
+     * Filters only allowable orderBys
+     *
+     * @param string $orderby
+     * @return string
+     */
+    public function whitelistOrderBy($orderby)
+    {
+        return in_array($orderby, $this->attribute_whitelist['orderby'], true) ? $orderby : $this->default_attributes['orderby'];
     }
 }
