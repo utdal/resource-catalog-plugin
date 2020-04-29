@@ -87,7 +87,7 @@ let resource_catalog_app = new Vue({
       if (typeof resource_catalog_options === 'object') {
         let options = resource_catalog_options;
         let order_choices = ['asc', 'desc'];
-        let orderby_choices = ['author', 'date', 'id', 'include', 'modified', 'parent', 'relevance', 'slug', 'include_slugs', 'title'];
+        let orderby_choices = ['date', 'id', 'modified', 'parent', 'slug', 'title'];
 
         if ('site_url' in options) this.base_url = validate_url(options.site_url) || this.base_url;
         if ('search_expand_button' in options) this.features.search_expand_button = Boolean(options.search_expand_button);
@@ -212,7 +212,10 @@ let resource_catalog_app = new Vue({
 
     sort(propertyName) {
       if (propertyName in this.order) {
-        this[propertyName] = _.orderBy(this[propertyName], this.order[propertyName].by, this.order[propertyName].how);
+        this[propertyName] = _.orderBy(this[propertyName], property => {
+          let orderby = this.order[propertyName].by;
+          return (orderby === 'title') ? property.title.rendered.toLowerCase() : property[orderby];
+        }, this.order[propertyName].how);
       }
     },
 
