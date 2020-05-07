@@ -90,7 +90,7 @@
             <button v-if="resource.content" :aria-controls="`${resource.slug}_content`" :aria-expanded="(resource.content && resource.content.protected) ? 'true' : 'false'" @click="resource.content.protected = !resource.content.protected">
                 <span class="details-arrow">&#9658;</span> Details
             </button>
-            <a v-if="resource.resource_link" :href="resource.resource_link" target="_blank">
+            <a v-if="resource.resource_link" :href="resource.resource_link" target="_blank" @click="analyticsCaptureOutboundLink(resource.resource_link)">
                 <button class="resource-link">Get &#9658;</button>
             </a>
             <section :id="`${resource.slug}_content`" class="resource-content" v-show="resource.content && resource.content.protected" v-html="resource.content.rendered"></section>

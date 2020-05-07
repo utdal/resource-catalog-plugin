@@ -27,3 +27,4 @@ Example usage: `[resource_catalog search_expand_button="false" search_expanded="
 - `orderby="title"` : order the displayed resources by the specified attribute (see Wordpress REST API docs for allowable values)
 - `order="asc"` : order the displayed resources as 'asc' or 'desc'
 - `show_all="true"` : load and show all resources on page load
+- `outbound_analytics="false"` : capture outbound resource link click events in Google Analytics

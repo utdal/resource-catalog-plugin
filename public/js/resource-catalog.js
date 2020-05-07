@@ -35,6 +35,7 @@ let resource_catalog_app = new Vue({
         categories: true,
         programs: true,
       },
+      outbound_analytics: true,
     },
     order: {
       resources: {by: 'title', how: 'asc'},
@@ -100,6 +101,7 @@ let resource_catalog_app = new Vue({
         if ('categories_filter' in options) this.features.filter.categories = Boolean(options.categories_filter);
         if ('programs_filter' in options) this.features.filter.programs = Boolean(options.programs_filter);
         if ('filters' in options) this.features.filters = Boolean(options.filters);
+        if ('outbound_analytics' in options) this.features.outbound_analytics = Boolean(options.outbound_analytics);
         if ('order' in options) this.order.resources.how = order_choices.includes(options.order) ? options.order : 'asc';
         if ('orderby' in options) this.order.resources.by = orderby_choices.includes(options.orderby) ? options.orderby : 'title';
         if ('search_expanded' in options) this.search_expanded = this.features.search_expand_button ? Boolean(options.search_expanded) : true;
@@ -201,6 +203,17 @@ let resource_catalog_app = new Vue({
 
     fetchTags() {
       this.fetchFromWordPress(new URL(this.base_url + '/wp-json/wp/v2/tags'), 'tags');
+    },
+
+    analyticsCaptureOutboundLink(url) {
+      if (this.outbound_analytics && (typeof ga === 'function')) {
+        ga('send', 'event', 'outbound', 'click', url, {
+          'transport': 'beacon',
+          'hitCallback': () => { console.log('Outbound link clicked: ' + url) }
+        });
+      }
+
+      return true;
     },
 
     debounceFetchResources() {

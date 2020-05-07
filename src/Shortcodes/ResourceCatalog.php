@@ -26,6 +26,7 @@ class ResourceCatalog extends Shortcode
         'order' => 'asc',
         'orderby' => 'title',
         'show_all' => true,
+        'outbound_analytics' => false,
     ];
 
     /** @var array Filters to apply to the shortcode attributes. */
@@ -44,6 +45,7 @@ class ResourceCatalog extends Shortcode
         'order' => FILTER_CALLBACK,
         'orderby' => FILTER_CALLBACK,
         'show_all' => FILTER_VALIDATE_BOOLEAN,
+        'outbound_analytics' => FILTER_VALIDATE_BOOLEAN,
     ];
 
     /** @var array Whitelist values for shortcode attributes */
