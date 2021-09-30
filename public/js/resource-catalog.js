@@ -8,16 +8,13 @@ let resource_catalog_app = new Vue({
   data: {
     base_url: window.location.origin,
     resources: [],
-    audiences: [],
-    lengths: [],
-    programs: [],
     categories: [],
     tags: [],
-    audience_filter: 'all',
-    length_filter: 'all',
-    program_filter: 'all',
+    custom_taxonomies: [],
     category_filter: 'all',
     tag_filter: 'all',
+    custom_taxonomies_filters: {},
+    custom_taxonomies_choices: {},
     search: '',
     loading: true,
     search_timeout: undefined,
@@ -26,14 +23,15 @@ let resource_catalog_app = new Vue({
       initial_load: true,
       search_expand_button: true,
       search: true,
+      search_tags: true,
+      search_categories: true,
+      search_custom_filters: true,
       reset: true,
       filters: true,
       filter: {
-        audiences: true,
-        lengths: true,
         tags: true,
         categories: true,
-        programs: true,
+        custom_taxonomies: false,
       },
       outbound_analytics: true,
     },
@@ -42,21 +40,17 @@ let resource_catalog_app = new Vue({
     },
     fetched: {
       resources: false,
-      audiences: false,
-      lengths: false,
-      programs: false,
       categories: false,
       tags: false,
+      custom: false,
     },
   },
 
   mounted() {
     this.setOptions();
-    this.fetchAudiences();
-    this.fetchLengths();
-    this.fetchPrograms();
     this.fetchCategories();
     this.fetchTags();
+    this.fetchCustomTaxonomies();
     if (this.features.initial_load) this.fetchResources();
   },
 
@@ -68,12 +62,14 @@ let resource_catalog_app = new Vue({
 
     filtered() {
       return this.search.length > 0 ||
-        this.audience_filter !== 'all' ||
-        this.length_filter !== 'all' ||
-        this.program_filter !== 'all' ||
         this.category_filter !== 'all' ||
-        this.tag_filter !== 'all';
+        this.tag_filter !== 'all' ||
+        this.customTaxonomyFiltered;
     },
+
+    customTaxonomyFiltered() {
+      return Boolean(Object.values(this.custom_taxonomies_filters).find(selected => selected !== 'all'));
+    }
 
   },
 
@@ -85,6 +81,18 @@ let resource_catalog_app = new Vue({
         return url;
       };
 
+      let set_custom_taxonomies = (taxonomies) => {
+        for (let taxonomy of taxonomies) {
+          this.custom_taxonomies.push({
+            'name': taxonomy.name,
+            'label': taxonomy.singular_label,
+            'labels': taxonomy.labels,
+            'rest_base': taxonomy.rest_base || taxonomy.name,
+          });
+          this.$set(this.custom_taxonomies_filters, taxonomy.name, 'all');
+        }
+      };
+
       if (typeof resource_catalog_options === 'object') {
         let options = resource_catalog_options;
         let order_choices = ['asc', 'desc'];
@@ -93,13 +101,15 @@ let resource_catalog_app = new Vue({
         if ('site_url' in options) this.base_url = validate_url(options.site_url) || this.base_url;
         if ('search_expand_button' in options) this.features.search_expand_button = Boolean(options.search_expand_button);
         if ('search' in options) this.features.search = Boolean(options.search);
+        if ('search_tags' in options) this.features.search_tags = Boolean(options.search_tags);
+        if ('search_categories' in options) this.features.search_categories = Boolean(options.search_categories);
+        if ('search_custom_filters' in options) this.features.search_custom_filters = Boolean(options.search_custom_filters);
         if ('reset' in options) this.features.reset = Boolean(options.reset);
         if ('show_all' in options) this.features.initial_load = Boolean(options.show_all);
-        if ('audiences_filter' in options) this.features.filter.audiences = Boolean(options.audiences_filter);
-        if ('lengths_filter' in options) this.features.filter.lengths = Boolean(options.lengths_filter);
         if ('tags_filter' in options) this.features.filter.tags = Boolean(options.tags_filter);
         if ('categories_filter' in options) this.features.filter.categories = Boolean(options.categories_filter);
-        if ('programs_filter' in options) this.features.filter.programs = Boolean(options.programs_filter);
+        if ('custom_filters' in options) this.features.filter.custom_taxonomies = Boolean(options.custom_filters);
+        if (this.features.filter.custom_taxonomies && options.custom_filters instanceof Array) set_custom_taxonomies(options.custom_filters);
         if ('filters' in options) this.features.filters = Boolean(options.filters);
         if ('outbound_analytics' in options) this.features.outbound_analytics = Boolean(options.outbound_analytics);
         if ('order' in options) this.order.resources.how = order_choices.includes(options.order) ? options.order : 'asc';
@@ -108,7 +118,7 @@ let resource_catalog_app = new Vue({
       }
     },
 
-    fetchFromWordPress(url, propertyName, page = 1, union = false, sort = false) {
+    fetchFromWordPress(url, propertyName, page = 1, union = false, sort = false, parentPropertyName) {
       this.loading = true;
       let totalPages;
       let params = new URLSearchParams(url.search);
@@ -124,6 +134,11 @@ let resource_catalog_app = new Vue({
         .then((data) => {
           this[propertyName] = union ? _.unionBy(this[propertyName], data, 'id') : data;
           this.$set(this.fetched, propertyName, true);
+          if (parentPropertyName) {
+            let subProperty = {};
+            subProperty[propertyName] = this[propertyName];
+            this[parentPropertyName] = Object.assign(this[parentPropertyName], subProperty);
+          }
           this.loading = false;
           if (page < totalPages) {
             this.fetchFromWordPress(url, propertyName, page+1, true);
@@ -140,15 +155,6 @@ let resource_catalog_app = new Vue({
       params.orderby = this.order.resources.by;
       params.order = this.order.resources.how;
 
-      if (this.audience_filter !== 'all') {
-        params.resource_audiences = this.audience_filter;
-      }
-      if (this.length_filter !== 'all') {
-        params.resource_lengths = this.length_filter;
-      }
-      if (this.program_filter !== 'all') {
-        params.resource_programs = this.program_filter;
-      }
       if (this.tag_filter !== 'all') {
         params.tags = this.tag_filter;
       }
@@ -159,42 +165,53 @@ let resource_catalog_app = new Vue({
         params.search = this.search;
       }
 
+      for (const custom_filter in this.custom_taxonomies_filters) {
+        if (this.custom_taxonomies_filters[custom_filter] !== 'all') {
+          params[custom_filter] = this.custom_taxonomies_filters[custom_filter];
+        }
+      }
+
       url.search = new URLSearchParams(params);
 
       this.$set(this.fetched, 'resources', false);
       this.fetchFromWordPress(url, 'resources');
 
-      // Search also searches tags and categories
+      // Search also searches tags, categories, and custom taxonomies
       if (this.search) {
         delete params.search;
         let searched_tags = this.searchFetchedTags(this.search);
         let searched_cats = this.searchFetchedCategories(this.search);
 
-        if (this.tag_filter === 'all' && searched_tags.length > 0) {
+        if (this.features.search_tags && this.tag_filter === 'all' && searched_tags.length > 0) {
           params.tags = searched_tags.map(tag => tag.id).join(',');
           url.search = new URLSearchParams(params);
           this.fetchFromWordPress(url, 'resources', 1, true, true);
           delete params.tags;
         }
 
-        if (this.category_filter === 'all' && searched_cats.length > 0) {
+        if (this.features.search_categories && this.category_filter === 'all' && searched_cats.length > 0) {
           params.categories = searched_cats.map(cat => cat.id).join(',');
           url.search = new URLSearchParams(params);
           this.fetchFromWordPress(url, 'resources', 1, true, true);
         }
+
+        if (this.features.search_custom_filters && !this.customTaxonomyFiltered) {
+          let searched_taxes = this.searchFetchedCustomTaxonomies(this.search);
+          for (const [custom_filter, tax_choices] of Object.entries(searched_taxes)) {
+            if (tax_choices.length > 0) {
+              params[custom_filter] = tax_choices.map(tax => tax.id).join(',');
+              url.search = new URLSearchParams(params);
+              this.fetchFromWordPress(url, 'resources', 1, true, true);
+            }
+          }
+        }
       }
     },
 
-    fetchAudiences() {
-      this.fetchFromWordPress(new URL(this.base_url + '/wp-json/wp/v2/resource_audiences'), 'audiences');
-    },
-
-    fetchLengths() {
-      this.fetchFromWordPress(new URL(this.base_url + '/wp-json/wp/v2/resource_lengths'), 'lengths');
-    },
-
-    fetchPrograms() {
-      this.fetchFromWordPress(new URL(this.base_url + '/wp-json/wp/v2/resource_programs'), 'programs');
+    fetchCustomTaxonomies() {
+      for (let taxonomy of this.custom_taxonomies) {
+        this.fetchFromWordPress(new URL(this.base_url + '/wp-json/wp/v2/' + taxonomy.rest_base), taxonomy.name, 1, false, false, 'custom_taxonomies_choices');
+      }
     },
 
     fetchCategories() {
@@ -240,6 +257,14 @@ let resource_catalog_app = new Vue({
       return this.categories.filter(cat => cat.name.toLowerCase().includes(query.toLowerCase()));
     },
 
+    searchFetchedCustomTaxonomies(query) {
+      let matched_taxonomies = {};
+      for (const [tax_name, tax_choices] of Object.entries(this.custom_taxonomies_choices)) {
+        matched_taxonomies[tax_name] = tax_choices.filter(tax => tax.name.toLowerCase().includes(query.toLowerCase()));
+      }
+      return matched_taxonomies;
+    },
+
     getPropertyValue(id, propertyName, attributeName) {
       let found_property = this[propertyName].find(property => property.id === id);
 
@@ -278,6 +303,12 @@ let resource_catalog_app = new Vue({
       return this.getPropertyValue(id, 'audiences', 'slug');
     },
 
+    taxonomyName(id, taxonomy) {
+      let found_property = this.custom_taxonomies_choices[taxonomy].find(property => property.id === id);
+
+      return (found_property && 'name' in found_property) ? found_property.name : id;
+    },
+
     toggleSearchExpanded() {
       this.search_expanded = !this.search_expanded;
     },
@@ -291,12 +322,12 @@ let resource_catalog_app = new Vue({
     },
 
     reset() {
-      this.audience_filter = 'all';
-      this.length_filter = 'all';
-      this.program_filter = 'all';
       this.category_filter = 'all';
       this.tag_filter = 'all';
       this.search = '';
+      for (const custom_filter in this.custom_taxonomies_filters) {
+        this.custom_taxonomies_filters[custom_filter] = 'all';
+      }
       if (this.features.initial_load) {
         this.fetchResources();
       } else {

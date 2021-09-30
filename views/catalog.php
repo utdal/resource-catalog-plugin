@@ -25,39 +25,21 @@
                     </select>
                 </div>
 
-                <div v-if="features.filter.audiences" class="project-filter">
-                    <label for="audiences_p">Audience</label>
-                    <select class="audiences_filter" name="audiences_p" v-model="audience_filter" @change="fetchResources">
-                        <option selected value="all">All Audiences</option>
-                        <option disabled>---</option>
-                        <option v-for="audience in audiences" :value="audience.id">{{ audience.name }}</option>
-                    </select>
-                </div>
-
                 <div v-if="features.filter.tags" class="project-filter">
-                    <label for="tags_p">Topic</label>
+                    <label for="tags_p">Tag</label>
                     <select class="tags_filter" name="tags_p" v-model="tag_filter" @change="fetchResources">
-                        <option selected value="all">All Topics</option>
+                        <option selected value="all">All Tags</option>
                         <option disabled>---</option>
                         <option v-for="tag in tags" :value="tag.id">{{ tag.name }}</option>
                     </select>
                 </div>
 
-                <div v-if="features.filter.lengths" class="project-filter">
-                    <label for="lengths_p">Length</label>
-                    <select class="lengths_filter" name="lengths_p" v-model="length_filter" @change="fetchResources">
-                        <option selected value="all">All Lengths</option>
+                <div v-for="custom_taxonomy in custom_taxonomies" class="project-filter">
+                    <label :for="custom_taxonomy.name">{{ custom_taxonomy.label }}</label>
+                    <select :name="custom_taxonomy.name" v-model="custom_taxonomies_filters[custom_taxonomy.name]" @change="fetchResources">
+                        <option selected value="all">{{ custom_taxonomy.labels.all_items }}</option>
                         <option disabled>---</option>
-                        <option v-for="length in lengths" :value="length.id">{{ length.name }}</option>
-                    </select>
-                </div>
-
-                <div v-if="features.filter.programs" class="project-filter">
-                    <label for="programs_p">Program</label>
-                    <select class="award_filter" name="programs_p" v-model="program_filter" @change="fetchResources">
-                        <option selected value="all">All Programs</option>
-                        <option disabled>---</option>
-                        <option v-for="program in programs" :value="program.id">{{ program.name }}</option>
+                        <option v-for="tax in custom_taxonomies_choices[custom_taxonomy.name]" :value="tax.id">{{ tax.name }}</option>
                     </select>
                 </div>
 
@@ -85,6 +67,9 @@
                 <div v-for="audience in resource.resource_audiences" :class="['resource-audience', audienceSlug(audience)]">{{ audienceName(audience) }}</div>
                 <div v-for="tag in resource.tags" :class="['resource-tag', tagSlug(tag)]">{{ tagName(tag) }}</div>
                 <div v-for="length in resource.resource_lengths" :class="['resource-length', lengthSlug(length)]">{{ lengthName(length) }}</div>
+                <template v-for="custom_taxonomy in custom_taxonomies" :key="custom_taxonomy.name">
+                    <div v-for="tax in resource[custom_taxonomy.name]" class="resource-tag">{{ taxonomyName(tax, custom_taxonomy.name) }}</div>
+                </template>
             </section>
             <div class="resource-excerpt" v-if="resource.excerpt" v-html="resource.excerpt.rendered"></div>
             <button v-if="resource.content" :aria-controls="`${resource.slug}_content`" :aria-expanded="(resource.content && resource.content.protected) ? 'true' : 'false'" @click="resource.content.protected = !resource.content.protected">

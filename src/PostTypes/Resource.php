@@ -29,7 +29,7 @@ class Resource extends CustomPost
         "show_in_menu" => true,
         "show_in_nav_menus" => true,
         "exclude_from_search" => false,
-        'menu_icon' => 'dashicons-media-default',
+        'menu_icon' => 'dashicons-book-alt',
         "capability_type" => "post",
         "map_meta_cap" => true,
         "hierarchical" => true,

@@ -17,11 +17,12 @@ class ResourceCatalog extends Shortcode
         'search' => true,
         'reset' => true,
         'filters' => true,
-        'audiences_filter' => true,
-        'lengths_filter' => true,
         'tags_filter' => true,
         'categories_filter' => true,
-        'programs_filter' => true,
+        'custom_filters' => '',
+        'search_tags' => true,
+        'search_categories' => true,
+        'search_custom_filters' => true,
         'search_expanded' => false,
         'order' => 'asc',
         'orderby' => 'title',
@@ -36,11 +37,12 @@ class ResourceCatalog extends Shortcode
         'search' => FILTER_VALIDATE_BOOLEAN,
         'reset' => FILTER_VALIDATE_BOOLEAN,
         'filters' => FILTER_VALIDATE_BOOLEAN,
-        'audiences_filter' => FILTER_VALIDATE_BOOLEAN,
-        'lengths_filter' => FILTER_VALIDATE_BOOLEAN,
         'tags_filter' => FILTER_VALIDATE_BOOLEAN,
         'categories_filter' => FILTER_VALIDATE_BOOLEAN,
-        'programs_filter' => FILTER_VALIDATE_BOOLEAN,
+        'custom_filters' => FILTER_CALLBACK,
+        'search_tags' => FILTER_VALIDATE_BOOLEAN,
+        'search_categories' => FILTER_VALIDATE_BOOLEAN,
+        'search_custom_filters' => FILTER_VALIDATE_BOOLEAN,
         'search_expanded' => FILTER_VALIDATE_BOOLEAN,
         'order' => FILTER_CALLBACK,
         'orderby' => FILTER_CALLBACK,
@@ -75,6 +77,7 @@ class ResourceCatalog extends Shortcode
     {
         $this->default_attributes['site_url'] = get_bloginfo('url');
 
+        $this->attribute_filter_options['custom_filters'] = ['options' => [$this, 'getCustomTaxonomies']];
         $this->attribute_filter_options['order'] = ['options' => [$this, 'whitelistOrder']];
         $this->attribute_filter_options['orderby'] = ['options' => [$this, 'whitelistOrderBy']];
 
@@ -97,6 +100,29 @@ class ResourceCatalog extends Shortcode
         include("{$this->view_path}/catalog.php");
 
         return ob_get_clean();
+    }
+
+    /**
+     * Looks up any custom taxonomies to be used as filters
+     *
+     * @param string $taxonomy_list
+     * @return array
+     */
+    public function getCustomTaxonomies($taxonomy_list)
+    {
+        $taxonomies = [];
+
+        if (is_string($taxonomy_list) && function_exists('cptui_get_cptui_taxonomy_object') ) {
+            foreach (explode(',', $taxonomy_list) as $taxonomy) {
+                $cptui_taxonomy = cptui_get_cptui_taxonomy_object(trim($taxonomy));
+    
+                if (!empty($cptui_taxonomy)) {
+                    $taxonomies[] = $cptui_taxonomy;
+                }
+            }
+        }
+
+        return $taxonomies;
     }
 
     /**

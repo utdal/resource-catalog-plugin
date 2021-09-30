@@ -25,7 +25,6 @@ class ResourceCatalogPlugin
 
         add_action('init', [$this, 'registerPostTypes']);
         add_action('init', [$this, 'registerShortcodes']);
-        add_action('init', [$this, 'registerTaxonomies'], 15);
         add_action('cmb2_admin_init', [$this, 'registerCustomFields']);
         add_action('rest_api_init', [$this, 'registerCustomFieldAPIs']);
         add_action('wp_enqueue_scripts', [$this, 'registerScripts']);
@@ -53,15 +52,6 @@ class ResourceCatalogPlugin
     public function registerCustomFieldAPIs()
     {
         (new Resource())->registerFieldAPIs();
-    }
-
-    public function registerTaxonomies()
-    {
-        $resource_name = (new Resource())->name;
-
-        (new Audiences([$resource_name]))->register();
-        (new Lengths([$resource_name]))->register();
-        (new Programs([$resource_name]))->register();
     }
 
     public function registerShortcodes($templates)
