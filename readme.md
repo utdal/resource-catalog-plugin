@@ -22,8 +22,8 @@ Example usage: `[resource_catalog search_expand_button="false" search_expanded="
 - `tags_filter="true"` : show/hide the tags filter
 - `categories_filter="true"` : show/hide the categories filter
 - `custom_filters=""` : comma-separated slugs of CPTUI custom taxonomies for which to show filters
-- `custom_filters_labels="true" : show/hide the custom filters labels
-- `custom_filters_descriptions="true" : show/hide the custom filters descriptions
+- `custom_filters_labels="true"` : show/hide the custom filters labels
+- `custom_filters_descriptions="true"` : show/hide the custom filters descriptions
 - `search_expanded="false"` : expand the search & filters by default
 - `search_tags=true`: if a search exactly matches a tag, show all resources with that tag instead of searching content
 - `search_categories=true`: if a search exactly matches a category, show all resources with that category instead of searching content
