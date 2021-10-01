@@ -28,6 +28,10 @@ class ResourceCatalog extends Shortcode
         'search_expanded' => false,
         'order' => 'asc',
         'orderby' => 'title',
+        'featured_image' => true,
+        'excerpt' => true,
+        'content' => true,
+        'content_expand_button' => true,
         'show_all' => true,
         'outbound_analytics' => false,
     ];
@@ -50,6 +54,10 @@ class ResourceCatalog extends Shortcode
         'search_expanded' => FILTER_VALIDATE_BOOLEAN,
         'order' => FILTER_CALLBACK,
         'orderby' => FILTER_CALLBACK,
+        'featured_image' => FILTER_VALIDATE_BOOLEAN,
+        'excerpt' => FILTER_VALIDATE_BOOLEAN,
+        'content' => FILTER_VALIDATE_BOOLEAN,
+        'content_expand_button' => FILTER_VALIDATE_BOOLEAN,
         'show_all' => FILTER_VALIDATE_BOOLEAN,
         'outbound_analytics' => FILTER_VALIDATE_BOOLEAN,
     ];

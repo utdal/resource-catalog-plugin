@@ -14,6 +14,7 @@ Below is a list of shortcode attributes that you can specify on the shortcode, a
 
 Example usage: `[resource_catalog search_expand_button="false" search_expanded="true"]`
 
+- `site_url=""` : specify the base API URL for pulling in resources, i.e "{site_url}/wp-json/wp/v2"
 - `search_expand_button="true"` : show/hide the search expand button
 - `search="true"` : show/hide the search box
 - `reset="true"` : show/hide the reset button
@@ -30,7 +31,15 @@ Example usage: `[resource_catalog search_expand_button="false" search_expanded="
 - `orderby="title"` : order the displayed resources by the specified attribute (see Wordpress REST API docs for allowable values)
 - `order="asc"` : order the displayed resources as 'asc' or 'desc'
 - `show_all="true"` : load and show all resources on page load
+- `featured_image="true"` : show featured images of resources
+- `excerpt="true"`: show the excerpts of resources
+- `content="true"`: show the content of resources
+- `content_expand_button="true"`: hide the content behind a "Details" toggle button
 - `outbound_analytics="false"` : capture outbound resource link click events in Google Analytics
+
+## Custom Link Field
+
+Resources have a custom link field that you can point to any URL. This will be displayed as a "Get" button on the resource.
 
 ## Custom Taxonomies
 

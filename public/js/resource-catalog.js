@@ -36,6 +36,10 @@ let resource_catalog_app = new Vue({
         custom_taxonomies: false,
       },
       outbound_analytics: true,
+      featured_image: true,
+      excerpt: true,
+      content: true,
+      content_expand_button: true,
     },
     order: {
       resources: {by: 'title', how: 'asc'},
@@ -120,6 +124,10 @@ let resource_catalog_app = new Vue({
         if ('order' in options) this.order.resources.how = order_choices.includes(options.order) ? options.order : 'asc';
         if ('orderby' in options) this.order.resources.by = orderby_choices.includes(options.orderby) ? options.orderby : 'title';
         if ('search_expanded' in options) this.search_expanded = this.features.search_expand_button ? Boolean(options.search_expanded) : true;
+        if ('featured_image' in options) this.features.featured_image = Boolean(options.featured_image);
+        if ('excerpt' in options) this.features.excerpt = Boolean(options.excerpt);
+        if ('content' in options) this.features.content = Boolean(options.content);
+        if ('content_expand_button' in options) this.features.content_expand_button = Boolean(options.content_expand_button);
       }
     },
 
@@ -160,6 +168,9 @@ let resource_catalog_app = new Vue({
       params.orderby = this.order.resources.by;
       params.order = this.order.resources.how;
 
+      if (this.features.featured_image) {
+        params._embed = "wp:featuredmedia";
+      }
       if (this.tag_filter !== 'all') {
         params.tags = this.tag_filter;
       }

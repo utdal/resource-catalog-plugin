@@ -58,28 +58,27 @@
     <div v-if="filtered || loading" class="resource-count">{{ loading ? 'Loading ' : resourceCount }} resources:</div>
 
     <section v-if="fetched.resources" class="resources">
-        <article v-for="resource in resources" class="resource" :id="resource.slug">
+        <article v-for="resource in resources" :key="resource.id" class="resource" :id="resource.slug">
             <h2 class="resource-title" v-html="resource.title.rendered"></h2>
+            <img v-if="features.featured_image && resource._embedded && resource._embedded['wp:featuredmedia']" :src="resource._embedded['wp:featuredmedia'][0].media_details.sizes.large.source_url" :alt="resource._embedded['wp:featuredmedia'][0].alt_text">
             <section class="resource-cats-and-tags">
                 <div v-for="category in resource.categories" :class="['resource-category', categorySlug(category)]" :title="categoryName(category)">
                     <span class="first-letter" :title="categoryName(category)">{{ categoryName(category).charAt(0) }}</span>
                     <span class="category-name sr-only">{{ categoryName(category) }}</span>
                 </div>
-                <div v-for="audience in resource.resource_audiences" :class="['resource-audience', audienceSlug(audience)]">{{ audienceName(audience) }}</div>
                 <div v-for="tag in resource.tags" :class="['resource-tag', tagSlug(tag)]">{{ tagName(tag) }}</div>
-                <div v-for="length in resource.resource_lengths" :class="['resource-length', lengthSlug(length)]">{{ lengthName(length) }}</div>
                 <template v-for="custom_taxonomy in custom_taxonomies" :key="custom_taxonomy.name">
-                    <div v-for="tax in resource[custom_taxonomy.name]" class="resource-tag">{{ taxonomyName(tax, custom_taxonomy.name) }}</div>
+                    <div v-for="tax in resource[custom_taxonomy.name]" :class="['resource-tag', custom_taxonomy.name]">{{ taxonomyName(tax, custom_taxonomy.name) }}</div>
                 </template>
             </section>
-            <div class="resource-excerpt" v-if="resource.excerpt" v-html="resource.excerpt.rendered"></div>
-            <button v-if="resource.content" :aria-controls="`${resource.slug}_content`" :aria-expanded="(resource.content && resource.content.protected) ? 'true' : 'false'" @click="resource.content.protected = !resource.content.protected">
+            <div class="resource-excerpt" v-if="features.excerpt && resource.excerpt" v-html="resource.excerpt.rendered"></div>
+            <button v-if="features.content_expand_button && features.content && resource.content" :aria-controls="`${resource.slug}_content`" :aria-expanded="(resource.content && resource.content.protected) ? 'true' : 'false'" @click="resource.content.protected = !resource.content.protected">
                 <span class="details-arrow">&#9658;</span> Details
             </button>
             <a v-if="resource.resource_link" :href="resource.resource_link" target="_blank" @click="analyticsCaptureOutboundLink(resource.resource_link)">
                 <button class="resource-link">Get &#9658;</button>
             </a>
-            <section :id="`${resource.slug}_content`" class="resource-content" v-show="resource.content && resource.content.protected" v-html="resource.content.rendered"></section>
+            <section :id="`${resource.slug}_content`" class="resource-content" v-if="features.content" v-show="resource.content && (resource.content.protected || !features.content_expand_button)" v-html="resource.content.rendered"></section>
         </article>
     </section>
 
