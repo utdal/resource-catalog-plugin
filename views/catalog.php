@@ -35,7 +35,8 @@
                 </div>
 
                 <div v-for="custom_taxonomy in custom_taxonomies" class="project-filter">
-                    <label :for="custom_taxonomy.name">{{ custom_taxonomy.label }}</label>
+                    <label v-if="features.custom_filters_labels" class="resource-filter-label" :for="custom_taxonomy.name">{{ custom_taxonomy.label }}</label>
+                    <div v-if="features.custom_filters_descriptions" class="resource-filter-description">{{ custom_taxonomy.description }}</div>
                     <select :name="custom_taxonomy.name" v-model="custom_taxonomies_filters[custom_taxonomy.name]" @change="fetchResources">
                         <option selected value="all">{{ custom_taxonomy.labels.all_items }}</option>
                         <option disabled>---</option>

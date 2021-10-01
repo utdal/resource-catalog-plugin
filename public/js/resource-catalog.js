@@ -26,6 +26,8 @@ let resource_catalog_app = new Vue({
       search_tags: true,
       search_categories: true,
       search_custom_filters: true,
+      custom_filters_labels: true,
+      custom_filters_descriptions: true,
       reset: true,
       filters: true,
       filter: {
@@ -87,6 +89,7 @@ let resource_catalog_app = new Vue({
             'name': taxonomy.name,
             'label': taxonomy.singular_label,
             'labels': taxonomy.labels,
+            'description': taxonomy.description,
             'rest_base': taxonomy.rest_base || taxonomy.name,
           });
           this.$set(this.custom_taxonomies_filters, taxonomy.name, 'all');
@@ -104,6 +107,8 @@ let resource_catalog_app = new Vue({
         if ('search_tags' in options) this.features.search_tags = Boolean(options.search_tags);
         if ('search_categories' in options) this.features.search_categories = Boolean(options.search_categories);
         if ('search_custom_filters' in options) this.features.search_custom_filters = Boolean(options.search_custom_filters);
+        if ('custom_filters_labels' in options) this.features.custom_filters_labels = Boolean(options.custom_filters_labels);
+        if ('custom_filters_descriptions' in options) this.features.custom_filters_descriptions = Boolean(options.custom_filters_descriptions);
         if ('reset' in options) this.features.reset = Boolean(options.reset);
         if ('show_all' in options) this.features.initial_load = Boolean(options.show_all);
         if ('tags_filter' in options) this.features.filter.tags = Boolean(options.tags_filter);
