@@ -12,12 +12,12 @@
 
         <div v-show="search_expanded" id="search_and_filter_container" role="search">
 
-            <input v-if="features.search" class="project-searchbox" type="search" placeholder="Search..." v-model="search" @input="debounceFetchResources">
+            <input v-if="features.search" class="resource-searchbox" type="search" placeholder="Search..." v-model="search" @input="debounceFetchResources">
 
-            <div v-if="features.filters" class="project-filters">
+            <div v-if="features.filters" class="resource-filters">
 
-                <div v-if="features.filter.categories" class="project-filter">
-                    <label for="categories_p">Category</label>
+                <div v-if="features.filter.categories" class="resource-filter resource-category-filter">
+                    <label class="resource-filter-label" for="categories_p">Category</label>
                     <select class="solution_filter" name="categories_p" v-model="category_filter" @change="fetchResources">
                         <option selected value="all">All Categories</option>
                         <option disabled>---</option>
@@ -25,8 +25,8 @@
                     </select>
                 </div>
 
-                <div v-if="features.filter.tags" class="project-filter">
-                    <label for="tags_p">Tag</label>
+                <div v-if="features.filter.tags" class="resource-filter resource-category-filter">
+                    <label class="resource-filter-label" for="tags_p">Tag</label>
                     <select class="tags_filter" name="tags_p" v-model="tag_filter" @change="fetchResources">
                         <option selected value="all">All Tags</option>
                         <option disabled>---</option>
@@ -34,7 +34,7 @@
                     </select>
                 </div>
 
-                <div v-for="custom_taxonomy in custom_taxonomies" class="project-filter">
+                <div v-for="custom_taxonomy in custom_taxonomies" class="resource-filter resource-custom-filter">
                     <label v-if="features.custom_filters_labels" class="resource-filter-label" :for="custom_taxonomy.name">{{ custom_taxonomy.label }}</label>
                     <div v-if="features.custom_filters_descriptions" class="resource-filter-description">{{ custom_taxonomy.description }}</div>
                     <select :name="custom_taxonomy.name" v-model="custom_taxonomies_filters[custom_taxonomy.name]" @change="fetchResources">

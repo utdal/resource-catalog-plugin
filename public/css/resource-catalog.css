@@ -33,25 +33,25 @@
   text-align: center;
 }
 
-.resource-catalog input.project-searchbox {
+.resource-catalog input.resource-searchbox {
   width: 100%;
   margin-bottom: 1em;
 }
 
-.resource-catalog .project-filters {
+.resource-catalog .resource-filters {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-end;
 }
 
-.resource-catalog .project-filters .project-filter {
+.resource-catalog .resource-filters .resource-filter {
   padding: 10px 20px;
   flex-basis: 20%;
   min-width: 275px;
 }
 
-.resource-catalog .project-filters .project-filter label:not(.checkbox-label) {
+.resource-catalog .resource-filters .resource-filter label:not(.checkbox-label) {
   display: block;
   font-size: 24px;
   line-height: 125%;
@@ -60,7 +60,7 @@
   font-weight: bold;
 }
 
-.resource-catalog .project-filters .project-filter select {
+.resource-catalog .resource-filters .resource-filter select {
   font-size: 18px;
   width: 100%;
   background-color: #f0f0f0;
