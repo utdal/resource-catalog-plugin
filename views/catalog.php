@@ -64,7 +64,7 @@
             <section class="resource-cats-and-tags">
                 <div v-for="category in resource.categories" :class="['resource-category', categorySlug(category)]" :title="categoryName(category)">
                     <span class="first-letter" :title="categoryName(category)">{{ categoryName(category).charAt(0) }}</span>
-                    <span class="category-name sr-only">{{ categoryName(category) }}</span>
+                    <span class="resource-tag category-name sr-only">{{ categoryName(category) }}</span>
                 </div>
                 <div v-for="tag in resource.tags" :class="['resource-tag', tagSlug(tag)]">{{ tagName(tag) }}</div>
                 <template v-for="custom_taxonomy in custom_taxonomies" :key="custom_taxonomy.name">
