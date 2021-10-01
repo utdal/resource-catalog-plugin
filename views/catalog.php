@@ -1,5 +1,5 @@
 <div id="resource_catalog" class="resource-catalog">
-    <div class="wrapper-gutters">
+    <div class="wrapper-gutters search-and-filter-wrapper">
 
         <div v-if="features.search_expand_button && (features.search || features.filters)" class="activate_search_btn_container">
             <button type="button" :aria-expanded="search_expanded ? 'true' : 'false'" aria-controls="search_and_filter_container" @click="toggleSearchExpanded">
@@ -10,7 +10,7 @@
             </button>
         </div>
 
-        <div v-show="search_expanded" id="search_and_filter_container" role="search">
+        <div v-show="search_expanded" id="search_and_filter_container" class="search-and-filter-container" role="search">
 
             <input v-if="features.search" class="resource-searchbox" type="search" placeholder="Search..." v-model="search" @input="debounceFetchResources">
 

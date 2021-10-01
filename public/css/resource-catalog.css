@@ -3,7 +3,7 @@
   to { opacity: 1; }
 }
 
-.resource-catalog #search_and_filter_container {
+.resource-catalog .search-and-filter-container {
   text-align: center;
   padding: 1em;
   animation: resource-catalog-fade-in 0.4s;
