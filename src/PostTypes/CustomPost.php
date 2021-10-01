@@ -182,6 +182,21 @@ abstract class CustomPost
             'not_found'             => "No $this->plural Found",
             'not_found_in_trash'    => "No $this->plural Found in Trash",
             'parent'                => "Parent $this->singular",
+            'parent_item_colon'     => "Parent $this->singular:",
+            'archives'              => "$this->singular Archives",
+            'attributes'            => "$this->singular Attributes",
+            'insert_into_item'      => "Insert into $this->singular",
+            'uploaded_to_this_item' => "Uploaded to this $this->singular",
+            'filter_items_list'     => "Filter $this->plural list",
+            'items_list_navigation' => "$this->plural list navigation",
+            'items_list'            => "$this->plural list",
+            'item_scheduled'        => "$this->singular scheduled.",
+            'item_updated'          => "$this->singular updated.",
+            'item_link'             => "$this->singular link",
+            'item_link_description' => "A link to a $this->singular.",
+            'item_published'        => "$this->singular published.",
+            'item_published_privately' => "$this->singular published privately.",
+            'item_reverted_to_draft'   => "$this->singular reverted to draft.",
         ];
     }
 
