@@ -3,15 +3,15 @@
 /**
  * The plugin bootstrap file
  *
- * @link              https://github.com/utdallasresearch/resource-catalog
+ * @link              https://github.com/utdal/resource-catalog-plugin
  * @since             1.0.0
  * @package           UTDallas_Resource_Catalog
  *
  * @wordpress-plugin
  * Plugin Name:       UT Dallas Resource Catalog
- * Plugin URI:        https://github.com/utdallasresearch/resource-catalog
+ * Plugin URI:        https://github.com/utdal/resource-catalog-plugin
  * Description:       Manage and display a searchable, filterable catalog of resources. See `readme.md` for more info.
- * Version:           2.0.0
+ * Version:           2.0.1
  * Author:            UT Dallas Research Information Systems
  * Author URI:        https://research.utdallas.edu
  * License:           MIT
@@ -20,7 +20,7 @@
  * Domain Path:       /languages
  */
 
-define('UTDallasResourceCatalog\PLUGIN_VERSION', '2.0.0');
+define('UTDallasResourceCatalog\PLUGIN_VERSION', '2.0.1');
 define('UTDallasResourceCatalog\PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('UTDallasResourceCatalog\PLUGIN_URL', plugin_dir_url(__FILE__));
 
