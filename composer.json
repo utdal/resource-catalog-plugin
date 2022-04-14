@@ -1,9 +1,9 @@
 {
-    "name" : "utdallasresearch/resource-catalog",
+    "name" : "utdal/resource-catalog-plugin",
     "type" : "wordpress-plugin",
     "description": "UT Dallas Resource Catalog WordPress plugin",
     "keywords": ["catalog", "wordpress"],
-    "homepage": "http://github.com/utdallasresearch/resource-catalog",
+    "homepage": "http://github.com/utdal/resource-catalog-plugin",
     "license": "MIT",
     "authors": [{
         "name": "Wun Chiou",
@@ -11,6 +11,6 @@
         "role": "Developer"
     }],
     "require": {
-        "php": ">=7.1"
+        "php": ">=7.3"
     }
 }
