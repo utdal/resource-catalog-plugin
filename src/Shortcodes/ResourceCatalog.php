@@ -2,6 +2,8 @@
 
 namespace UTDallasResourceCatalog\Shortcodes;
 
+use UTDallasResourceCatalog\ResourceCatalogPlugin;
+
 class ResourceCatalog extends Shortcode
 {
     /** @var string Shortcode name. */
@@ -103,9 +105,14 @@ class ResourceCatalog extends Shortcode
      */
     public function render()
     {
+        if (!wp_script_is('resource_catalog_js', 'registered')) {
+            (new ResourceCatalogPlugin())->registerScripts();
+        }
+
         wp_enqueue_style('resource_catalog_css');
         wp_enqueue_script('resource_catalog_js');
-        wp_localize_script('resource_catalog_js', 'resource_catalog_options', $this->attributes);
+
+        wp_add_inline_script('resource_catalog_js', 'const resource_catalog_options = ' . wp_json_encode($this->attributes) . ';', 'before');
 
         ob_start();
 
