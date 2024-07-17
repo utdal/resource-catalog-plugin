@@ -55,7 +55,7 @@
         </div>
     </div>
 
-    <div v-if="filtered || loading" class="resource-count">{{ loading ? 'Loading ' : resourceCount }} resources:</div>
+    <div v-if="filtered || loading" class="resource-count" v-html="loading ? 'Loading resources:' : resourceCount + ' resources:'"></div>
 
     <section v-if="fetched.resources" class="resources">
         <article v-for="resource in resources" :key="resource.id" class="resource" :id="resource.slug">
@@ -67,8 +67,8 @@
                     <span class="resource-tag category-name sr-only">{{ categoryName(category) }}</span>
                 </div>
                 <div v-for="tag in resource.tags" :class="['resource-tag', tagSlug(tag)]">{{ tagName(tag) }}</div>
-                <template v-for="custom_taxonomy in custom_taxonomies" :key="custom_taxonomy.name">
-                    <div v-for="tax in resource[custom_taxonomy.name]" :class="['resource-tag', custom_taxonomy.name]">{{ taxonomyName(tax, custom_taxonomy.name) }}</div>
+                <template v-for="custom_taxonomy in custom_taxonomies">
+                    <div v-for="tax in resource[custom_taxonomy.name]" :class="['resource-tag', custom_taxonomy.name]" :key="custom_taxonomy.name">{{ taxonomyName(tax, custom_taxonomy.name) }}</div>
                 </template>
             </section>
             <div class="resource-excerpt" v-if="features.excerpt && resource.excerpt" v-html="resource.excerpt.rendered"></div>
