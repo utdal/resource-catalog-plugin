@@ -2,6 +2,8 @@ if (window.location.hostname.endsWith('test')) {
   Vue.config.devtools = true;
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+
 let resource_catalog_app = new Vue({
   el: '#resource_catalog',
 
@@ -352,5 +354,7 @@ let resource_catalog_app = new Vue({
     },
 
   },
+
+});
 
 });
