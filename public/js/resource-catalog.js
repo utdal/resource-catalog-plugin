@@ -13,6 +13,7 @@ let resource_catalog_app = new Vue({
     categories: [],
     tags: [],
     custom_taxonomies: [],
+    link_label: 'Get',
     post_type: 'resource',
     category_filter: 'all',
     tag_filter: 'all',
@@ -123,6 +124,7 @@ let resource_catalog_app = new Vue({
         if ('custom_filters' in options) this.features.filter.custom_taxonomies = Boolean(options.custom_filters);
         if (this.features.filter.custom_taxonomies && options.custom_filters instanceof Array) set_custom_taxonomies(options.custom_filters);
         if ('filters' in options) this.features.filters = Boolean(options.filters);
+        if ('link_label' in options) this.link_label = options.link_label;
         if ('outbound_analytics' in options) this.features.outbound_analytics = Boolean(options.outbound_analytics);
         if ('order' in options) this.order.resources.how = order_choices.includes(options.order) ? options.order : 'asc';
         if ('orderby' in options) this.order.resources.by = orderby_choices.includes(options.orderby) ? options.orderby : 'title';

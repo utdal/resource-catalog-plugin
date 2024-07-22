@@ -76,7 +76,7 @@
                 <span class="details-arrow">&#9658;</span> Details
             </button>
             <a v-if="resource.resource_link" :href="resource.resource_link" target="_blank" @click="analyticsCaptureOutboundLink(resource.resource_link)">
-                <button class="resource-link">Get &#9658;</button>
+                <button class="resource-link"><span class="resource-link-label" v-text="link_label">Get</span> <span class="resource-link-arrow">&#9658;</span></button>
             </a>
             <section :id="`${resource.slug}_content`" class="resource-content" v-if="features.content" v-show="resource.content && (resource.content.protected || !features.content_expand_button)" v-html="resource.content.rendered"></section>
         </article>
