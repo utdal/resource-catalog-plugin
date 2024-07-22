@@ -28,6 +28,7 @@ Example usage: `[resource_catalog search_expand_button="false" search_expanded="
 - `search_tags=true`: if a search exactly matches a tag, show all resources with that tag instead of searching content
 - `search_categories=true`: if a search exactly matches a category, show all resources with that category instead of searching content
 - `search_custom_filters=true`: if a search exactly matches a custom taxonomy, show all resources with that custom taxonomy instead of searching content
+- `link_label="Get"` : the text label to use on the resource link button
 - `orderby="title"` : order the displayed resources by the specified attribute (see Wordpress REST API docs for allowable values)
 - `order="asc"` : order the displayed resources as 'asc' or 'desc'
 - `post_type="resource"` : the slug of the post type to query and show in results
@@ -40,11 +41,11 @@ Example usage: `[resource_catalog search_expand_button="false" search_expanded="
 
 ## Custom Link Field
 
-Resources have a custom link field that you can point to any URL. This will be displayed as a "Get" button on the resource. If utilizing your own custom post type, it must have a custom field with slug `resource_link` in order to show this button.
+Resources have a custom link field that you can point to any URL. This will be displayed as a "Get" button on the resource. Use the `link_label` shortcode attribute to set a different label. If utilizing your own custom post type, it must have a custom field with slug `resource_link` in order to show this button.
 
 ## Custom Post Types
 
-If you prefer to use a different post type than the included default "Resource" type, you can specify the slug of that post type in the shortcode options (see above).
+If you prefer to use a different post type than the included default "Resource" type, you can specify the slug of that post type with the `post_type` shortcode attribute.
 
 ## Custom Taxonomies
 
