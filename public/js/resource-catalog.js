@@ -13,6 +13,7 @@ let resource_catalog_app = new Vue({
     categories: [],
     tags: [],
     custom_taxonomies: [],
+    post_type: 'resource',
     category_filter: 'all',
     tag_filter: 'all',
     custom_taxonomies_filters: {},
@@ -125,6 +126,7 @@ let resource_catalog_app = new Vue({
         if ('outbound_analytics' in options) this.features.outbound_analytics = Boolean(options.outbound_analytics);
         if ('order' in options) this.order.resources.how = order_choices.includes(options.order) ? options.order : 'asc';
         if ('orderby' in options) this.order.resources.by = orderby_choices.includes(options.orderby) ? options.orderby : 'title';
+        if ('post_type' in options) this.post_type = options.post_type;
         if ('search_expanded' in options) this.search_expanded = this.features.search_expand_button ? Boolean(options.search_expanded) : true;
         if ('featured_image' in options) this.features.featured_image = Boolean(options.featured_image);
         if ('excerpt' in options) this.features.excerpt = Boolean(options.excerpt);
@@ -165,7 +167,7 @@ let resource_catalog_app = new Vue({
 
     fetchResources() {
       let params = {};
-      let url = new URL(this.base_url + '/wp-json/wp/v2/resource');
+      let url = new URL(this.base_url + '/wp-json/wp/v2/' + this.post_type);
 
       params.orderby = this.order.resources.by;
       params.order = this.order.resources.how;
